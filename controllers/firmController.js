@@ -68,5 +68,5 @@ const deletebyFirm = async(req,res)=>{
 
 // Export the addFirm function with the upload middleware applied
 module.exports = {
-   addFirm: [upload.single('image'), addFirm,dele]
+   addFirm: [upload.single('image'), addFirm,deletebyFirm]
 };
