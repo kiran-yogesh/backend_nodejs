@@ -25,6 +25,6 @@
     console.log("server is running");
  })
 
- app.use('/home',(req,res)=>{
+ app.use('/',(req,res)=>{
       res.send("Hello World");
  });
