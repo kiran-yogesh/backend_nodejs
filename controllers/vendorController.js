@@ -44,12 +44,11 @@ const vendorLogin = async(req,res)=>{
 }
 const getVendors = async(req,res)=>{
    try {
-      const vendors = await Vendor.find().populate('firm');
-      res.json({vendors})
-   } catch (error) {
-      console.log();
-      res.status(500).json({message:"internal error"})
-   }
+        const vendors = await Vendor.find({});
+        res.status(200).json(vendors);
+    } catch (err) {
+        res.status(500).json({ error: "Failed to fetch vendors", details: err });
+    }
 }
 const getVendorbyid = async(req,res)=>{
    const vendorid = req.params.id;
