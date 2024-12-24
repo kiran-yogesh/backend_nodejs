@@ -54,7 +54,7 @@ const getVendors = async(req,res)=>{
    } catch (error) {
       console.log();
       res.status(500).json({message:"internal error"})
-   }
+   }       
 }
 const getVendorbyid = async(req,res)=>{
    const vendorid = req.params.id;
