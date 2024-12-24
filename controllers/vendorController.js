@@ -6,28 +6,33 @@ const dotEnv = require('dotenv');
 dotEnv.config();
 const secret = process.env.secretKey;
 
-const vendoRegister = async(req,res)=>{
-       const{username,email,password}=req.body;
-       try {
-          const vendorEmail=await Vendor.findOne({email});
-          if(vendorEmail){
-            return res.status(400).json("Email is exist");
-          }
-          const hashedPassword = await bcpt.hash(password,10);
-          const newVendor = new Vendor({
-                username,
-                email,
-                password:hashedPassword
-          });
-          await newVendor.save();
-          res.status(201).json({message:"Vendor registered succefully"});
-          console.log('registered');
+const vendoRegister = async (req, res) => {
+   const { username, email, password } = req.body;
 
-       } catch (error) {
-          console.error(error);
-          res.status(500).json({error:"internal server error"});
+   try {
+       if (!username || !email || !password) {
+           return res.status(400).json({ error: "All fields are required" });
        }
-}
+       const existingVendor = await Vendor.findOne({ email });
+       if (existingVendor) {
+           return res.status(400).json({ error: "Email already exists" });
+       }
+
+       const hashedPassword = await bcpt.hash(password, 10);
+
+       const newVendor = new Vendor({
+           username,
+           email,
+           password: hashedPassword,
+       });  
+       await newVendor.save();
+       res.status(201).json({ message: "Vendor registered successfully" });
+       console.log('Vendor registered successfully');
+   } catch (error) {
+       console.error("Error during registration:", error);
+       res.status(500).json({ error: "Internal server error" });
+   }
+};
 const vendorLogin = async(req,res)=>{
     const{email,password}=req.body;
       try {
@@ -44,7 +49,7 @@ const vendorLogin = async(req,res)=>{
 }
 const getVendors = async(req,res)=>{
    try {
-      const vendors = await Vendor.find().populate('firm');
+      const vendors = await Vendor.find({}).populate('firm');
       res.json({vendors})
    } catch (error) {
       console.log();
