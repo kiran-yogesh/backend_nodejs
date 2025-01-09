@@ -44,14 +44,28 @@ const addFirm = async (req, res) => {
 
        // Save the firm document
        const savedFirm =await firm.save();
+       const firmIds = savedFirm._id
        vendor.firm.push(savedFirm);
        await vendor.save();
 
-       return res.status(200).json({ message: "Firm added successfully" });
+       return res.status(200).json({ message: "Firm added successfully",firmIds });
    } catch (error) {
        console.error("Error adding firm:", error);
        return res.status(500).json({ error: "Internal server error" });
    }
+}
+const getFirmbyId = async(req,res)=>{
+    const firmId = req.params.firmId;
+    try {
+        const firmData = await Firm.findById(firmId);
+        if(!firmData){
+           return res.status(400).json({message:"firm not found"});
+        }
+        res.status(200).json({firmData});
+     } catch (error) {
+        console.error(error);
+            res.status(500).json({error:"internal server error"});
+     }
 }
 const deletebyFirm = async(req,res)=>{
     try {
@@ -68,5 +82,5 @@ const deletebyFirm = async(req,res)=>{
 
 // Export the addFirm function with the upload middleware applied
 module.exports = {
-   addFirm: [upload.single('image'), addFirm],deletebyFirm
+   addFirm: [upload.single('image'), addFirm],deletebyFirm,getFirmbyId
 };
