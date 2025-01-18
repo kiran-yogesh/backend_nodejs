@@ -63,7 +63,7 @@ const addproduct = async (req, res) => {
 
 const getProductbyFirm = async (req, res) => {
     try {
-        const firmId = req.params.firmIds;
+        const firmId = req.params.firmId;
 
         
         if (!firmId) {
